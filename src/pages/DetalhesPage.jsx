@@ -50,10 +50,16 @@ const DetalhesPage = () => {
       : "text-green-600 bg-green-100";
 
   return (
-    <div className="container mx-auto p-4 md:p-8">
-      <Link to="/" className="text-blue-600 hover:underline mb-4 inline-block">
-        &larr; Voltar para a lista
-      </Link>
+    <div className="container mx-auto px-4 md:px-8 md:pb-8">
+      <button
+        onClick={() => (window.location.href = "/")}
+        className="cursor-pointer mt-6 bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors mb-4"
+      >
+        <Link to="/" className="text-white hover:underline inline-block">
+          &larr; Voltar para página inicial
+        </Link>
+      </button>
+
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="md:flex">
           <div className="md:w-1/3">
@@ -89,7 +95,7 @@ const DetalhesPage = () => {
 
             <button
               onClick={() => setShowForm(true)}
-              className="mt-6 bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+              className="cursor-pointer mt-6 bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
             >
               Enviar Informação Adicional
             </button>

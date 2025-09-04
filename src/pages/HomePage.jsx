@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { getPessoas } from "../services/api.js";
 import PessoaCard from "../components/PessoaCard";
 import { Search } from "lucide-react";
@@ -36,6 +36,49 @@ const HomePage = () => {
     fetchData();
   }, [fetchData]);
 
+  const paginasVisiveis = useMemo(() => {
+    const maximoBolinhasVisiveis = 4;
+    const paginas = [];
+
+    if (totalPaginas <= maximoBolinhasVisiveis + 2) {
+      for (let i = 1; i <= totalPaginas; i++) {
+        paginas.push(i);
+      }
+      return paginas;
+    }
+
+    paginas.push(1);
+
+    let inicioBloco = Math.max(2, pagina - 1);
+    let fimBloco = Math.min(totalPaginas - 1, pagina + 2);
+
+    if (pagina < maximoBolinhasVisiveis) {
+      fimBloco = maximoBolinhasVisiveis;
+    }
+
+    if (pagina > totalPaginas - (maximoBolinhasVisiveis - 1)) {
+      inicioBloco = totalPaginas - (maximoBolinhasVisiveis - 1);
+    }
+
+    if (inicioBloco > 2) {
+      paginas.push("...");
+      paginas.push("...");
+    }
+
+    for (let i = inicioBloco; i <= fimBloco; i++) {
+      paginas.push(i);
+    }
+
+    if (fimBloco < totalPaginas - 1) {
+      paginas.push("...");
+      paginas.push("...");
+    }
+
+    paginas.push(totalPaginas);
+
+    return paginas;
+  }, [pagina, totalPaginas]);
+
   const handleFiltroChange = (filtro, valor) => {
     setFiltros((prev) => ({ ...prev, [filtro]: valor }));
     setPagina(1);
@@ -58,7 +101,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 md:p-8">
+    <div className="container mx-auto px-4 md:px-8 md:pb-8 md:pt-4">
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <form
           onSubmit={handleSubmitBusca}
@@ -150,21 +193,24 @@ const HomePage = () => {
 
           {pessoas.length > 0 && totalPaginas > 1 && (
             <div className="flex justify-center items-center mt-12 space-x-2">
-              {Array.from({ length: totalPaginas }, (_, i) => i + 1).map(
-                (numero) => (
+              {paginasVisiveis.map((item, index) =>
+                typeof item === "number" ? (
                   <button
-                    key={numero}
-                    onClick={() => setPagina(numero)}
-                    className={`w-10 h-10 font-semibold text-white rounded-full transition-colors flex items-center justify-center
-                        ${
-                          pagina === numero
-                            ? "bg-yellow-800 ring-2 ring-offset-2 ring-yellow-700"
-                            : "bg-yellow-700 hover:bg-yellow-800"
-                        }
-                    `}
+                    key={item}
+                    onClick={() => setPagina(item)}
+                    className={`cursor-pointer w-10 h-10 font-semibold text-white rounded-full transition-colors flex items-center justify-center ${
+                      pagina === item
+                        ? "bg-yellow-800 ring-2 ring-offset-2 ring-yellow-700"
+                        : "bg-yellow-700 hover:bg-yellow-800"
+                    }`}
                   >
-                    {numero}
+                    {item}
                   </button>
+                ) : (
+                  <span
+                    key={`ellipsis-${index}`}
+                    className="w-3 h-3 bg-yellow-700 rounded-full"
+                  ></span>
                 )
               )}
             </div>
