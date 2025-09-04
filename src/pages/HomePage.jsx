@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { getPessoas } from "../services/api.js";
 import PessoaCard from "../components/PessoaCard";
 import { Search } from "lucide-react";
+import toast from "react-hot-toast";
 
 const HomePage = () => {
   const [pessoas, setPessoas] = useState([]);
@@ -12,19 +13,17 @@ const HomePage = () => {
     sexo: "",
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [totalPaginas, setTotalPaginas] = useState(1);
 
   const fetchData = useCallback(() => {
     setLoading(true);
-    setError(null);
     getPessoas(pagina, filtros)
       .then((response) => {
         setPessoas(response.data.content || []);
         setTotalPaginas(response.data.totalPages || 1);
       })
       .catch((err) => {
-        setError("Falha ao carregar os dados. Tente novamente.");
+        toast.error("Falha ao carregar os dados. API pode estar indisponível.");
         console.error(err);
       })
       .finally(() => {
@@ -129,9 +128,8 @@ const HomePage = () => {
       </div>
 
       {loading && <p className="text-center">Carregando...</p>}
-      {error && <p className="text-center text-red-500">{error}</p>}
 
-      {!loading && !error && (
+      {!loading && (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {pessoas.length > 0 ? (
@@ -140,7 +138,7 @@ const HomePage = () => {
               ))
             ) : (
               <p className="col-span-full text-center text-gray-500 py-10">
-                Nenhum resultado encontrado para os filtros selecionados.
+                Nenhum resultado encontrado.
               </p>
             )}
           </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import InputMask from "react-input-mask";
 import { enviarInformacao } from "../services/api";
+import toast from "react-hot-toast";
 
 const InfoForm = ({ ocoId, closeModal }) => {
   const [observacao, setObservacao] = useState("");
@@ -8,16 +9,14 @@ const InfoForm = ({ ocoId, closeModal }) => {
   const [descricaoFoto, setDescricaoFoto] = useState("");
   const [foto, setFoto] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!observacao || !dataAvistamento) {
-      setError("Por favor, preencha a observação e a data.");
+      toast.error("Por favor, preencha a observação e a data.");
       return;
     }
     setSubmitting(true);
-    setError(null);
 
     // Converte a data do formato DD/MM/AAAA para AAAA-MM-DD
     const [dia, mes, ano] = dataAvistamento.split("/");
@@ -31,10 +30,12 @@ const InfoForm = ({ ocoId, closeModal }) => {
         foto,
         descricaoFoto: descricaoFoto || "Foto enviada pelo cidadão",
       });
-      alert("Informação enviada com sucesso! Obrigado por colaborar.");
+      toast.success(
+        "Informação enviada com sucesso! Obrigado por sua colaboração."
+      );
       closeModal();
     } catch (err) {
-      setError(
+      toast.error(
         "Falha ao enviar a informação. Verifique os dados e tente novamente."
       );
       console.error(err);
@@ -122,8 +123,6 @@ const InfoForm = ({ ocoId, closeModal }) => {
             />
           </div>
         )}
-
-        {error && <p className="text-red-500 text-sm">{error}</p>}
 
         <div className="text-right">
           <button

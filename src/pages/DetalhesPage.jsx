@@ -3,12 +3,12 @@ import { useParams, Link } from "react-router-dom";
 import { getPessoaById } from "../services/api";
 import InfoForm from "../components/InfoForm";
 import avatarPlaceholder from "../assets/avatar-placeholder.jpg";
+import toast from "react-hot-toast";
 
 const DetalhesPage = () => {
   const { id } = useParams();
   const [pessoa, setPessoa] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const DetalhesPage = () => {
         const response = await getPessoaById(id);
         setPessoa(response.data);
       } catch (err) {
-        setError("Não foi possível carregar os detalhes desta pessoa.");
+        toast.error("Não foi possível carregar os detalhes desta pessoa.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -28,9 +28,19 @@ const DetalhesPage = () => {
   }, [id]);
 
   if (loading) return <p className="text-center p-8">Carregando detalhes...</p>;
-  if (error) return <p className="text-center text-red-500 p-8">{error}</p>;
-  if (!pessoa) return null;
-
+  if (!pessoa) {
+    return (
+      <div className="text-center p-8">
+        <p className="text-gray-600">Não foi possível carregar os dados.</p>
+        <Link
+          to="/"
+          className="text-yellow-700 hover:underline mt-4 inline-block"
+        >
+          Voltar
+        </Link>
+      </div>
+    );
+  }
   const status = pessoa.ultimaOcorrencia.dataLocalizacao
     ? "Localizada"
     : "Desaparecida";
