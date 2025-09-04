@@ -136,7 +136,7 @@ const HomePage = () => {
 
       {!loading && (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {pessoas.length > 0 ? (
               pessoas.map((pessoa) => (
                 <PessoaCard key={pessoa.id} pessoa={pessoa} />
@@ -147,6 +147,28 @@ const HomePage = () => {
               </p>
             )}
           </div>
+
+          {pessoas.length > 0 && totalPaginas > 1 && (
+            <div className="flex justify-center items-center mt-12 space-x-2">
+              {Array.from({ length: totalPaginas }, (_, i) => i + 1).map(
+                (numero) => (
+                  <button
+                    key={numero}
+                    onClick={() => setPagina(numero)}
+                    className={`w-10 h-10 font-semibold text-white rounded-full transition-colors flex items-center justify-center
+                        ${
+                          pagina === numero
+                            ? "bg-yellow-800 ring-2 ring-offset-2 ring-yellow-700"
+                            : "bg-yellow-700 hover:bg-yellow-800"
+                        }
+                    `}
+                  >
+                    {numero}
+                  </button>
+                )
+              )}
+            </div>
+          )}
         </>
       )}
     </div>

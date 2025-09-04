@@ -1,4 +1,5 @@
 import axios from "axios";
+import { mockPessoasResponse } from "./mockData";
 
 const apiClient = axios.create({
   baseURL: "https://abitus-api.geia.vip",
@@ -69,5 +70,46 @@ export const enviarInformacao = ({
     headers: {
       "Content-Type": "multipart/form-data",
     },
+  });
+};
+
+/**
+ * Dados mockados pq a API está com erro (500) com
+ * paginação e os filtros, para um teste mais realista da UI.
+ */
+export const getPessoasMock = (pagina = 1, filtros = {}) => {
+  console.log("mostrando dados mockados");
+
+  const dadosFiltrados = mockPessoasResponse.content.filter((pessoa) => {
+    const nomeMatch = filtros.nome
+      ? pessoa.nome.toLowerCase().includes(filtros.nome.toLowerCase())
+      : true;
+
+    const statusPessoa = pessoa.ultimaOcorrencia.dataLocalizacao
+      ? "LOCALIZADO"
+      : "DESAPARECIDO";
+    const statusMatch = filtros.status ? statusPessoa === filtros.status : true;
+
+    const sexoMatch = filtros.sexo ? pessoa.sexo === filtros.sexo : true;
+
+    return nomeMatch && statusMatch && sexoMatch;
+  });
+
+  const porPagina = 10;
+  const totalPaginas = Math.ceil(dadosFiltrados.length / porPagina);
+  const indiceInicial = (pagina - 1) * porPagina;
+  const indiceFinal = pagina * porPagina;
+
+  const itensDaPagina = dadosFiltrados.slice(indiceInicial, indiceFinal);
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        data: {
+          content: itensDaPagina,
+          totalPages: totalPaginas,
+        },
+      });
+    }, 500);
   });
 };

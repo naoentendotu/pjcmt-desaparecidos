@@ -9,7 +9,7 @@ const Header = () => {
           <img
             src={logoPJC}
             alt="Logo da Polícia Civil MT"
-            className="h-28 mr-4"
+            className="h-24 mr-4 ml-4"
           />
         </Link>
         <div>

@@ -19,7 +19,7 @@ const PessoaCard = ({ pessoa }) => {
         <img
           src={fotoUrl}
           alt={pessoa.nome}
-          className="w-full h-56 object-cover"
+          className="w-full h-70 object-cover"
         />
         <div className="p-4">
           <h3 className="text-xl font-bold text-gray-900 truncate">
