@@ -3,6 +3,7 @@ import { getPessoas } from "../services/api.js";
 import PessoaCard from "../components/PessoaCard";
 import { Search } from "lucide-react";
 import toast from "react-hot-toast";
+import { Mosaic } from "react-loading-indicators";
 
 const HomePage = () => {
   const [pessoas, setPessoas] = useState([]);
@@ -127,7 +128,11 @@ const HomePage = () => {
         </div>
       </div>
 
-      {loading && <p className="text-center">Carregando...</p>}
+      {loading && (
+        <div className="flex justify-center items-center py-20">
+          <Mosaic color="#D69D0E" size="large" text="" />
+        </div>
+      )}
 
       {!loading && (
         <>
