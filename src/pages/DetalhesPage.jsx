@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getPessoaById } from "../services/api";
 import InfoForm from "../components/InfoForm";
-import avatarPlaceholder from "../assets/avatar-placeholder.png";
+import avatarPlaceholder from "../assets/avatar-placeholder.jpg";
 
 const DetalhesPage = () => {
   const { id } = useParams();

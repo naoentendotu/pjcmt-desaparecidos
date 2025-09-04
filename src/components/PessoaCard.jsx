@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import avatarPlaceholder from "../assets/avatar-placeholder.png";
+import avatarPlaceholder from "../assets/avatar-placeholder.jpg";
 
 const PessoaCard = ({ pessoa }) => {
   const status = pessoa.ultimaOcorrencia?.dataLocalizacao
