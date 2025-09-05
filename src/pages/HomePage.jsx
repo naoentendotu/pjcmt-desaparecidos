@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { getPessoas } from "../services/api.js";
+import { getPessoasMock, getPessoas } from "../services/api.js";
 import PessoaCard from "../components/PessoaCard";
 import { Search } from "lucide-react";
 import toast from "react-hot-toast";
@@ -12,6 +12,8 @@ const HomePage = () => {
     nome: "",
     status: "",
     sexo: "",
+    faixaIdadeInicial: 0,
+    faixaIdadeFinal: 0,
   });
   const [loading, setLoading] = useState(true);
   const [totalPaginas, setTotalPaginas] = useState(1);
@@ -24,8 +26,15 @@ const HomePage = () => {
         setTotalPaginas(response.data.totalPages || 1);
       })
       .catch((err) => {
-        toast.error("Falha ao carregar os dados. API pode estar indisponível.");
-        console.error(err);
+        console.error("Falha na API, ativando fallback para mock:", err);
+        toast.error("A API está indisponível. Exibindo dados de exemplo.", {
+          icon: "⚠️",
+          duration: 4000,
+        });
+        return getPessoasMock(pagina, filtros).then((mockResponse) => {
+          setPessoas(mockResponse.data.content || []);
+          setTotalPaginas(mockResponse.data.totalPages || 1);
+        });
       })
       .finally(() => {
         setLoading(false);
@@ -79,8 +88,40 @@ const HomePage = () => {
     return paginas;
   }, [pagina, totalPaginas]);
 
-  const handleFiltroChange = (filtro, valor) => {
-    setFiltros((prev) => ({ ...prev, [filtro]: valor }));
+  const limparFiltros = () => {
+    setFiltros({
+      nome: "",
+      status: "",
+      sexo: "",
+      faixaIdadeInicial: 0,
+      faixaIdadeFinal: 0,
+    });
+    setPagina(1);
+  };
+
+  const opcoesIdade = [
+    { value: "0-0", label: "Idade" },
+    { value: "0-10", label: "0 a 10 anos" },
+    { value: "11-17", label: "11 a 17 anos" },
+    { value: "18-30", label: "18 a 30 anos" },
+    { value: "31-50", label: "31 a 50 anos" },
+    { value: "51-120", label: "Mais de 50 anos" },
+  ];
+
+  const handleFiltroChange = (e) => {
+    const { name, value } = e.target;
+    setFiltros((prev) => ({ ...prev, [name]: value }));
+    setPagina(1);
+  };
+
+  const handleIdadeChange = (e) => {
+    const { value } = e.target;
+    const [inicio, fim] = value.split("-").map(Number);
+    setFiltros((prev) => ({
+      ...prev,
+      faixaIdadeInicial: inicio || 0,
+      faixaIdadeFinal: fim || 0,
+    }));
     setPagina(1);
   };
 
@@ -90,18 +131,11 @@ const HomePage = () => {
 
   const handleSubmitBusca = (e) => {
     e.preventDefault();
-    setPagina(1);
     fetchData();
   };
 
-  const getFiltroClass = (filtro, valor) => {
-    return filtros[filtro] === valor
-      ? "bg-yellow-700 text-white"
-      : "bg-gray-200 text-gray-700 hover:bg-gray-300";
-  };
-
   return (
-    <div className="container mx-auto px-4 md:px-8 md:pb-8 md:pt-4">
+    <div className="container mx-auto px-4 md:px-8 md:pb-8 md:pt-36">
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <form
           onSubmit={handleSubmitBusca}
@@ -112,7 +146,7 @@ const HomePage = () => {
             value={filtros.nome}
             onChange={handleNomeChange}
             placeholder="Buscar por nome..."
-            className="w-full md:flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
+            className="cursor-pointer w-full md:flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
           />
           <button
             type="submit"
@@ -123,50 +157,48 @@ const HomePage = () => {
           </button>
         </form>
 
-        <div className="flex flex-wrap gap-3 mt-4">
-          <button
-            onClick={() => handleFiltroChange("status", "DESAPARECIDO")}
-            className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${getFiltroClass(
-              "status",
-              "DESAPARECIDO"
-            )}`}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+          <select
+            name="status"
+            value={filtros.status}
+            onChange={handleFiltroChange}
+            className="cursor-pointer w-full p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
           >
-            Desaparecidos
-          </button>
-          <button
-            onClick={() => handleFiltroChange("status", "LOCALIZADO")}
-            className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${getFiltroClass(
-              "status",
-              "LOCALIZADO"
-            )}`}
+            <option value="">Status</option>
+            <option value="DESAPARECIDO">Desaparecidos</option>
+            <option value="LOCALIZADO">Localizados</option>
+          </select>
+
+          <select
+            name="sexo"
+            value={filtros.sexo}
+            onChange={handleFiltroChange}
+            className="w-full cursor-pointer p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
           >
-            Localizados
-          </button>
-          <button
-            onClick={() => handleFiltroChange("sexo", "MASCULINO")}
-            className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${getFiltroClass(
-              "sexo",
-              "MASCULINO"
-            )}`}
+            <option value="">Sexo</option>
+            <option value="MASCULINO">Masculino</option>
+            <option value="FEMININO">Feminino</option>
+          </select>
+
+          <select
+            name="idade"
+            value={`${filtros.faixaIdadeInicial}-${filtros.faixaIdadeFinal}`}
+            onChange={handleIdadeChange}
+            className="w-full cursor-pointer p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
           >
-            Masculino
-          </button>
+            {opcoesIdade.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+
           <button
-            onClick={() => handleFiltroChange("sexo", "FEMININO")}
-            className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${getFiltroClass(
-              "sexo",
-              "FEMININO"
-            )}`}
+            onClick={limparFiltros}
+            className="cursor-pointer w-full flex items-center justify-center p-2 text-sm text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
           >
-            Feminino
-          </button>
-          <button
-            onClick={() =>
-              handleFiltroChange("status", "") & handleFiltroChange("sexo", "")
-            }
-            className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-black"
-          >
-            Limpar Filtros
+            {" "}
+            Limpar filtros
           </button>
         </div>
       </div>

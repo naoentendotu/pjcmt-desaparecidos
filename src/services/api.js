@@ -73,12 +73,15 @@ export const enviarInformacao = ({
   });
 };
 
+// =================================================================
+// FUNÇÕES DE MOCK
+// =================================================================
+
 /**
- * Dados mockados pq a API está com erro (500) com
- * paginação e os filtros, para um teste mais realista da UI.
+ * Dados mockados para getPessoas.
  */
 export const getPessoasMock = (pagina = 1, filtros = {}) => {
-  console.log("mostrando dados mockados");
+  console.log("Mostrando dados mockados");
 
   const dadosFiltrados = mockPessoasResponse.content.filter((pessoa) => {
     const nomeMatch = filtros.nome
@@ -110,6 +113,28 @@ export const getPessoasMock = (pagina = 1, filtros = {}) => {
           totalPages: totalPaginas,
         },
       });
-    }, 500);
+    }, 250);
+  });
+};
+
+/**
+ * DADOS MOCKADOS para getPessoaById.
+ */
+export const getPessoaByIdMock = (id) => {
+  console.log(`Dados mockados para o ID: ${id}`);
+
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const pessoa = mockPessoasResponse.content.find(
+        (p) => String(p.id) === id
+      );
+      if (pessoa) {
+        resolve({
+          data: pessoa,
+        });
+      } else {
+        reject(new Error("Pessoa não encontrada nos dados mockados."));
+      }
+    }, 250);
   });
 };

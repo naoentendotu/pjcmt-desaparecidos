@@ -27,7 +27,7 @@ const PessoaCard = ({ pessoa }) => {
           </h3>
           <p className="text-sm text-gray-600 mt-1">Cidade: {cidade}</p>
           <span
-            className={`mt-3 inline-block px-3 py-1 text-xs font-bold text-white rounded-full ${statusClass}`}
+            className={`uppercase mt-3 inline-block px-3 py-1 text-xs font-bold text-white rounded-full ${statusClass}`}
           >
             {status}
           </span>
