@@ -38,7 +38,7 @@ const DetalhesPage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-20">
+      <div className="flex justify-center items-center py-20 px-4 md:px-8 md:pb-8 md:pt-80">
         <Mosaic color="#D69D0E" size="large" text="" />
       </div>
     );
@@ -124,10 +124,18 @@ const DetalhesPage = () => {
       </div>
 
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div
+          className={`
+    fixed inset-0 z-50 flex items-center justify-center p-4
+    bg-black/30 backdrop-blur-sm
+    transition-opacity duration-800 ease-in-out
+    ${showForm ? "opacity-100 visible" : "opacity-0 invisible"}
+  `}
+        >
           <InfoForm
             ocoId={pessoa.ultimaOcorrencia.ocoId}
             closeModal={() => setShowForm(false)}
+            show={showForm}
           />
         </div>
       )}

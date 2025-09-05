@@ -1,9 +1,9 @@
 import { useState } from "react";
-import InputMask from "react-input-mask";
+import { IMaskInput } from "react-imask";
 import { enviarInformacao } from "../services/api";
 import toast from "react-hot-toast";
 
-const InfoForm = ({ ocoId, closeModal }) => {
+const InfoForm = ({ ocoId, closeModal, show }) => {
   const [observacao, setObservacao] = useState("");
   const [dataAvistamento, setDataAvistamento] = useState("");
   const [descricaoFoto, setDescricaoFoto] = useState("");
@@ -45,10 +45,17 @@ const InfoForm = ({ ocoId, closeModal }) => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-lg relative">
+    <div
+      className={`
+    bg-white p-8 rounded-lg shadow-2xl w-full max-w-lg relative
+    transform transition-all duration-300 ease-in-out
+    ${show ? "scale-100 opacity-100" : "scale-95 opacity-0"}
+  `}
+    >
+      {" "}
       <button
         onClick={closeModal}
-        className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl"
+        className="cursor-pointer absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl"
       >
         &times;
       </button>
@@ -79,10 +86,10 @@ const InfoForm = ({ ocoId, closeModal }) => {
           >
             Data em que foi visto(a) (obrigatório)
           </label>
-          <InputMask
-            mask="99/99/9999"
+          <IMaskInput
+            mask="00/00/0000"
             value={dataAvistamento}
-            onChange={(e) => setDataAvistamento(e.target.value)}
+            onAccept={(value) => setDataAvistamento(value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             placeholder="DD/MM/AAAA"
             required
@@ -99,9 +106,10 @@ const InfoForm = ({ ocoId, closeModal }) => {
           <input
             type="file"
             id="foto"
+            cursor-pointer
             onChange={(e) => setFoto(e.target.files[0])}
             accept="image/*"
-            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            className=" mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-400 file:text-white hover:file:bg-yellow-700 "
           />
         </div>
 
@@ -128,7 +136,7 @@ const InfoForm = ({ ocoId, closeModal }) => {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+            className=" cursor-pointer mt-6 bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors"
           >
             {submitting ? "Enviando..." : "Enviar Informação"}
           </button>
