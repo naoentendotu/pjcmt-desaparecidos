@@ -28,7 +28,6 @@ const HomePage = () => {
       .catch((err) => {
         console.error("Falha na API, ativando fallback para mock:", err);
         toast.error("A API está indisponível. Exibindo dados de exemplo.", {
-          icon: "⚠️",
           duration: 4000,
         });
         return getPessoasMock(pagina, filtros).then((mockResponse) => {
