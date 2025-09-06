@@ -2,12 +2,14 @@ import { useState } from "react";
 import { IMaskInput } from "react-imask";
 import { enviarInformacao } from "../services/api";
 import toast from "react-hot-toast";
+import MapaSelect from "./MapaSelect";
 
 const InfoForm = ({ ocoId, closeModal, show }) => {
   const [observacao, setObservacao] = useState("");
   const [dataAvistamento, setDataAvistamento] = useState("");
   const [descricaoFoto, setDescricaoFoto] = useState("");
   const [foto, setFoto] = useState(null);
+  const [location, setLocation] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -131,7 +133,7 @@ const InfoForm = ({ ocoId, closeModal, show }) => {
             />
           </div>
         )}
-
+        <MapaSelect position={location} onPositionChange={setLocation} />
         <div className="text-right">
           <button
             type="submit"

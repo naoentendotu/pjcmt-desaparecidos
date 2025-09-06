@@ -1,5 +1,5 @@
 import axios from "axios";
-import { mockPessoasResponse } from "./mockData";
+import { mockPessoasResponse, mockInformacoesResponse } from "./mockData";
 
 const apiClient = axios.create({
   baseURL: "https://abitus-api.geia.vip",
@@ -73,6 +73,19 @@ export const enviarInformacao = ({
   });
 };
 
+/**
+ * Busca o histórico de informações de uma ocorrência de desaparecimento.
+ * @param {number} ocorrenciaId - ID da ocorrência.
+ * @returns {Promise<object>}
+ */
+export const getInformacoesDesaparecido = (ocorrenciaId) => {
+  return apiClient.get(`/v1/ocorrencias/informacoes-desaparecido`, {
+    params: {
+      ocorrenciaId,
+    },
+  });
+};
+
 // =================================================================
 // FUNÇÕES DE MOCK
 // =================================================================
@@ -135,6 +148,25 @@ export const getPessoaByIdMock = (id) => {
       } else {
         reject(new Error("Pessoa não encontrada nos dados mockados."));
       }
+    }, 250);
+  });
+};
+
+/**
+ * DADOS MOCKADOS para getInformacoesDesaparecido.
+ */
+export const getInformacoesDesaparecidoMock = (ocoId) => {
+  console.log(`Dados mockados de histórico para a ocorrência ID: ${ocoId}`);
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const dadosRelacionados = mockInformacoesResponse.filter(
+        (info) => String(info.ocoId) === String(ocoId)
+      );
+
+      resolve({
+        data: dadosRelacionados,
+      });
     }, 250);
   });
 };

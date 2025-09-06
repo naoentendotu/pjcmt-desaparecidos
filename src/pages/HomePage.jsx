@@ -134,7 +134,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 md:px-8 md:pb-8 md:pt-36">
+    <div className="container mx-auto px-4 pt-35 md:px-8 md:pb-8 md:pt-36">
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <form
           onSubmit={handleSubmitBusca}
@@ -149,7 +149,7 @@ const HomePage = () => {
           />
           <button
             type="submit"
-            className="w-full md:w-auto flex items-center justify-center bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-yellow-800 transition-colors"
+            className="cursor-pointer w-full md:w-auto flex items-center justify-center bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-yellow-800 transition-colors"
           >
             <Search className="h-5 w-5 mr-2" />
             Buscar

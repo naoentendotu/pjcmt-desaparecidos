@@ -171,3 +171,38 @@ export const mockPessoasResponse = {
     },
   ],
 };
+
+export const mockInformacoesResponse = [
+  {
+    id: 201,
+    ocoId: 101,
+    data: "2025-08-18",
+    informacao:
+      "Uma câmera de segurança de uma loja próxima à rodoviária filmou João entrando em um ônibus com destino a Campo Grande - MS.",
+    anexos: ["https://example.com/video_onibus.mp4"],
+  },
+  {
+    id: 202,
+    ocoId: 101,
+    data: "2025-08-22",
+    informacao:
+      "Polícia de MS foi notificada. Denúncia anônima informou ter visto alguém parecido em um restaurante na cidade.",
+    anexos: [],
+  },
+  {
+    id: 203,
+    ocoId: 102,
+    data: "2025-07-21",
+    informacao:
+      "Vizinhos informaram que a viram conversando com uma parente distante no dia do desaparecimento.",
+    anexos: [],
+  },
+  {
+    id: 204,
+    ocoId: 102,
+    data: "2025-07-22",
+    informacao:
+      "Maria foi encontrada na casa de parentes em Chapada dos Guimarães. Ela passa bem e o caso foi encerrado.",
+    anexos: [],
+  },
+];
