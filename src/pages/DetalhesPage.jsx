@@ -61,28 +61,27 @@ const Paginacao = ({ paginaAtual, totalPaginas, onPageChange }) => {
   }, [paginaAtual, totalPaginas]);
 
   return (
-    <div className="flex justify-center items-center mt-8 space-x-2">
-      {" "}
+    <div className="flex justify-center items-center mt-8 space-x-1 sm:space-x-2">
       {paginasVisiveis.map((item, index) =>
         typeof item === "number" ? (
           <button
             key={item}
             onClick={() => onPageChange(item)}
-            className={`cursor-pointer w-10 h-10 font-semibold text-white rounded-full transition-colors flex items-center justify-center ${
+            className={`cursor-pointer w-8 h-8 md:w-10 md:h-10 text-sm md:text-base font-semibold text-white rounded-full transition-colors flex items-center justify-center ${
               paginaAtual === item
                 ? "bg-yellow-800 ring-2 ring-offset-2 ring-yellow-700"
                 : "bg-yellow-700 hover:bg-yellow-800"
             }`}
           >
-            {item}{" "}
+            {item}
           </button>
         ) : (
           <span
             key={`ellipsis-${index}`}
-            className="w-3 h-3 bg-yellow-700 rounded-full"
+            className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-700 rounded-full"
           ></span>
         )
-      )}{" "}
+      )}
     </div>
   );
 };
@@ -97,7 +96,8 @@ const TimelineItem = ({ info }) => {
       <div className="absolute left-[-26px] top-1 h-4 w-4 rounded-full bg-yellow-600 ring-4 ring-white"></div>
       <div className="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200 ml-4">
         <div className="flex items-center justify-between mb-2">
-          <p className="font-semibold text-gray-800 text-lg">
+          {" "}
+          <p className="font-semibold text-gray-800 text-base md:text-lg">
             {formatarData(info.data)}
           </p>
           {hasAnexos && (
@@ -143,8 +143,8 @@ const TimelineItem = ({ info }) => {
               )}
             </div>
           )}
-        </div>
-        <p className="text-gray-600 mt-1 whitespace-pre-wrap">
+        </div>{" "}
+        <p className="text-gray-600 text-sm md:text-base mt-1 whitespace-pre-wrap">
           {info.informacao}
         </p>
       </div>
@@ -328,7 +328,7 @@ const DetalhesPage = () => {
 
   if (!pessoa) {
     return (
-      <div className="text-center px-8 pb-8 pt-48 md:pt-64">
+      <div className="container mx-auto pt-24 px-4 md:px-8 md:pb-8 md:pt-36">
         <p className="text-gray-600">Não foi possível carregar os dados.</p>
         <Link
           to="/"
@@ -370,7 +370,7 @@ const DetalhesPage = () => {
           </div>
           <div className="md:w-2/3 p-6">
             <div className="flex justify-between items-start border-b border-gray-200 pb-2 mb-4">
-              <h2 className="text-3xl font-bold text-gray-900 ">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
                 {pessoa.nome}
               </h2>
               <span
@@ -378,34 +378,35 @@ const DetalhesPage = () => {
               >
                 {status}
               </span>
+            </div>{" "}
+            <div className="text-sm md:text-base space-y-1 text-gray-600">
+              <p className="mt-4 text-gray-600">
+                <strong>Idade:</strong> {pessoa.idade || "Não informado"}
+              </p>
+              <p className="mt-1 text-gray-600">
+                <strong>Sexo:</strong> {pessoa.sexo || "Não informado"}
+              </p>
+              <p className="mt-1 text-gray-600">
+                <strong>Data do desaparecimento:</strong>{" "}
+                {formatarDataHora(pessoa.ultimaOcorrencia.dtDesaparecimento)}
+              </p>
+              <p className="mt-1 text-gray-600">
+                <strong>Local do Desaparecimento:</strong>{" "}
+                {pessoa.ultimaOcorrencia.localDesaparecimentoConcat ||
+                  "Não informado"}
+              </p>
+              <p className="mt-1 text-gray-600">
+                <strong>Circunstâncias:</strong>{" "}
+                {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO?.informacao ||
+                  "Não informado"}
+              </p>
+              <p className="mt-1 text-gray-600">
+                <strong>Vestimentas:</strong>{" "}
+                {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
+                  ?.vestimentasDesaparecido || "Não informado"}
+              </p>
             </div>
-            <p className="mt-4 text-gray-600">
-              <strong>Idade:</strong> {pessoa.idade || "Não informado"}
-            </p>
-            <p className="mt-1 text-gray-600">
-              <strong>Sexo:</strong> {pessoa.sexo || "Não informado"}
-            </p>
-            <p className="mt-1 text-gray-600">
-              <strong>Data do desaparecimento:</strong>{" "}
-              {formatarDataHora(pessoa.ultimaOcorrencia.dtDesaparecimento)}
-            </p>
-            <p className="mt-1 text-gray-600">
-              <strong>Local do Desaparecimento:</strong>{" "}
-              {pessoa.ultimaOcorrencia.localDesaparecimentoConcat ||
-                "Não informado"}
-            </p>
-            <p className="mt-1 text-gray-600">
-              <strong>Circunstâncias:</strong>{" "}
-              {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO?.informacao ||
-                "Não informado"}
-            </p>
-            <p className="mt-1 text-gray-600">
-              <strong>Vestimentas:</strong>{" "}
-              {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
-                ?.vestimentasDesaparecido || "Não informado"}
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-4">
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setShowForm(true)}
                 className="cursor-pointer bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
@@ -428,10 +429,9 @@ const DetalhesPage = () => {
           </div>
         </div>
       </div>
-
       <div
         ref={historicoRef}
-        className="mt-8 bg-white shadow-lg rounded-lg p-6 scroll-mt-[135px]"
+        className="mt-8 bg-white shadow-lg rounded-lg p-4 sm:p-6 scroll-mt-24 md:scroll-mt-36"
       >
         <h3 className="text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">
           Linha do Tempo do Caso
@@ -491,7 +491,6 @@ const DetalhesPage = () => {
           </>
         )}
       </div>
-
       {showForm && (
         <div
           className={`
@@ -509,7 +508,6 @@ const DetalhesPage = () => {
           />
         </div>
       )}
-
       {showImageModal && (
         <div
           className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
