@@ -22,7 +22,12 @@ function LocationMarker({ position, onPositionChange }) {
   return position === null ? null : <Marker position={position}></Marker>;
 }
 
-const MapaSelect = ({ position, onPositionChange }) => {
+const MapaSelect = ({
+  position,
+  onPositionChange,
+  endereco,
+  loadingEndereco,
+}) => {
   // Coordenadas de Cuiabá para centralizar o mapa inicialmente
   const cuiabaCenter = [-15.601, -56.097];
 
@@ -47,10 +52,18 @@ const MapaSelect = ({ position, onPositionChange }) => {
         />
       </MapContainer>
       {position && (
-        <p className="text-xs text-gray-500 mt-1">
-          Localização selecionada: Lat {position.lat.toFixed(4)}, Lng{" "}
-          {position.lng.toFixed(4)}
-        </p>
+        <div className="text-xs text-gray-500 mt-2 p-2 bg-gray-50 rounded">
+          <p>
+            <strong>Lat:</strong> {position.lat.toFixed(4)},{" "}
+            <strong>Lng:</strong> {position.lng.toFixed(4)}
+          </p>
+          {loadingEndereco && <p className="mt-1">Buscando endereço...</p>}
+          {endereco && (
+            <p className="mt-1">
+              <strong>Endereço Aproximado:</strong> {endereco}
+            </p>
+          )}
+        </div>
       )}
     </div>
   );
