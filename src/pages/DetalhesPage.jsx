@@ -96,7 +96,6 @@ const TimelineItem = ({ info }) => {
       <div className="absolute left-[-26px] top-1 h-4 w-4 rounded-full bg-yellow-600 ring-4 ring-white"></div>
       <div className="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200 ml-4">
         <div className="flex items-center justify-between mb-2">
-          {" "}
           <p className="font-semibold text-gray-800 text-base md:text-lg">
             {formatarData(info.data)}
           </p>
@@ -143,7 +142,7 @@ const TimelineItem = ({ info }) => {
               )}
             </div>
           )}
-        </div>{" "}
+        </div>
         <p className="text-gray-600 text-sm md:text-base mt-1 whitespace-pre-wrap">
           {info.informacao}
         </p>
@@ -378,7 +377,7 @@ const DetalhesPage = () => {
               >
                 {status}
               </span>
-            </div>{" "}
+            </div>
             <div className="text-sm md:text-base space-y-1 text-gray-600">
               <p className="mt-4 text-gray-600">
                 <strong>Idade:</strong> {pessoa.idade || "Não informado"}
@@ -387,21 +386,21 @@ const DetalhesPage = () => {
                 <strong>Sexo:</strong> {pessoa.sexo || "Não informado"}
               </p>
               <p className="mt-1 text-gray-600">
-                <strong>Data do desaparecimento:</strong>{" "}
+                <strong>Data do desaparecimento:</strong>
                 {formatarDataHora(pessoa.ultimaOcorrencia.dtDesaparecimento)}
               </p>
               <p className="mt-1 text-gray-600">
-                <strong>Local do Desaparecimento:</strong>{" "}
+                <strong>Local do Desaparecimento:</strong>
                 {pessoa.ultimaOcorrencia.localDesaparecimentoConcat ||
                   "Não informado"}
               </p>
               <p className="mt-1 text-gray-600">
-                <strong>Circunstâncias:</strong>{" "}
+                <strong>Circunstâncias:</strong>
                 {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO?.informacao ||
                   "Não informado"}
               </p>
               <p className="mt-1 text-gray-600">
-                <strong>Vestimentas:</strong>{" "}
+                <strong>Vestimentas:</strong>
                 {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
                   ?.vestimentasDesaparecido || "Não informado"}
               </p>

@@ -4,6 +4,7 @@ import PessoaCard from "../components/PessoaCard";
 import { Search, SlidersHorizontal } from "lucide-react";
 import toast from "react-hot-toast";
 import { Mosaic } from "react-loading-indicators";
+import Footer from "../components/Footer";
 
 const HomePage = () => {
   const [pessoas, setPessoas] = useState([]);
@@ -136,133 +137,129 @@ const HomePage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 pt-24 md:px-8 md:pb-8 md:pt-36">
-      {" "}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        {" "}
-        <form
-          onSubmit={handleSubmitBusca}
-          className="flex flex-col md:flex-row items-center gap-4"
-        >
-          {" "}
-          <input
-            type="text"
-            value={filtros.nome}
-            onChange={handleNomeChange}
-            placeholder="Buscar por nome..."
-            className="cursor-pointer w-full md:flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
-          />{" "}
-          <button
-            type="submit"
-            className="cursor-pointer w-full md:w-auto flex items-center justify-center bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-yellow-800 transition-colors"
+    <>
+      <div className="container mx-auto px-4 pt-24 md:px-8 md:pb-8 md:pt-36">
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <form
+            onSubmit={handleSubmitBusca}
+            className="flex flex-col md:flex-row items-center gap-4"
           >
-            <Search className="h-5 w-5 mr-2" /> Buscar{" "}
-          </button>{" "}
-        </form>
-        {/* MUDANÇA 2: Botão para abrir filtros em telas pequenas */}
-        <div className="mt-4 md:hidden">
-          <button
-            onClick={() => setFiltrosAbertos(!filtrosAbertos)}
-            className="cursor-pointer w-full flex items-center justify-center p-2 text-sm text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-          >
-            <SlidersHorizontal className="h-4 w-4 mr-2" />
-            Opções de Filtro
-          </button>
-        </div>
-        {/* Container dos filtros agora é condicional */}{" "}
-        <div
-          className={`${
-            filtrosAbertos ? "grid" : "hidden"
-          } grid-cols-2 gap-4 mt-4 md:grid md:grid-cols-4`}
-        >
-          {" "}
-          <select
-            name="status"
-            value={filtros.status}
-            onChange={handleFiltroChange}
-            className="cursor-pointer w-full p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
-          >
-            <option value="">Status</option>{" "}
-            <option value="DESAPARECIDO">Desaparecidos</option>{" "}
-            <option value="LOCALIZADO">Localizados</option>{" "}
-          </select>{" "}
-          <select
-            name="sexo"
-            value={filtros.sexo}
-            onChange={handleFiltroChange}
-            className="w-full cursor-pointer p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
-          >
-            <option value="">Sexo</option>{" "}
-            <option value="MASCULINO">Masculino</option>{" "}
-            <option value="FEMININO">Feminino</option>{" "}
-          </select>{" "}
-          <select
-            name="idade"
-            value={`${filtros.faixaIdadeInicial}-${filtros.faixaIdadeFinal}`}
-            onChange={handleIdadeChange}
-            className="w-full cursor-pointer p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
-          >
-            {" "}
-            {opcoesIdade.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}{" "}
-              </option>
-            ))}{" "}
-          </select>{" "}
-          <button
-            onClick={limparFiltros}
-            className="cursor-pointer w-full flex items-center justify-center p-2 text-sm text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-          >
-            Limpar filtros{" "}
-          </button>{" "}
-        </div>{" "}
-      </div>
-      {loading && (
-        <div className="flex justify-center items-center py-20">
-          <Mosaic color="#D69D0E" size="large" text="" />
-        </div>
-      )}
-      {!loading && (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {pessoas.length > 0 ? (
-              pessoas.map((pessoa) => (
-                <PessoaCard key={pessoa.id} pessoa={pessoa} />
-              ))
-            ) : (
-              <p className="col-span-full text-center text-gray-500 py-10">
-                Nenhum resultado encontrado.
-              </p>
-            )}
+            <input
+              type="text"
+              value={filtros.nome}
+              onChange={handleNomeChange}
+              placeholder="Buscar por nome..."
+              className="cursor-pointer w-full md:flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
+            />
+            <button
+              type="submit"
+              className="cursor-pointer w-full md:w-auto flex items-center justify-center bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-yellow-800 transition-colors"
+            >
+              <Search className="h-5 w-5 mr-2" /> Buscar
+            </button>
+          </form>
+          <div className="mt-4 md:hidden">
+            <button
+              onClick={() => setFiltrosAbertos(!filtrosAbertos)}
+              className="cursor-pointer w-full flex items-center justify-center p-2 text-sm text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              <SlidersHorizontal className="h-4 w-4 mr-2" />
+              Opções de Filtro
+            </button>
           </div>
-
-          {pessoas.length > 0 && totalPaginas > 1 && (
-            <div className="flex justify-center items-center mt-12 space-x-2">
-              {paginasVisiveis.map((item, index) =>
-                typeof item === "number" ? (
-                  <button
-                    key={item}
-                    onClick={() => setPagina(item)}
-                    className={`cursor-pointer w-10 h-10 font-semibold text-white rounded-full transition-colors flex items-center justify-center ${
-                      pagina === item
-                        ? "bg-yellow-800 ring-2 ring-offset-2 ring-yellow-700"
-                        : "bg-yellow-700 hover:bg-yellow-800"
-                    }`}
-                  >
-                    {item}
-                  </button>
-                ) : (
-                  <span
-                    key={`ellipsis-${index}`}
-                    className="w-3 h-3 bg-yellow-700 rounded-full"
-                  ></span>
-                )
+          <div
+            className={`${
+              filtrosAbertos ? "grid" : "hidden"
+            } grid-cols-2 gap-4 mt-4 md:grid md:grid-cols-4`}
+          >
+            <select
+              name="status"
+              value={filtros.status}
+              onChange={handleFiltroChange}
+              className="cursor-pointer w-full p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
+            >
+              <option value="">Status</option>
+              <option value="DESAPARECIDO">Desaparecidos</option>
+              <option value="LOCALIZADO">Localizados</option>
+            </select>
+            <select
+              name="sexo"
+              value={filtros.sexo}
+              onChange={handleFiltroChange}
+              className="w-full cursor-pointer p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
+            >
+              <option value="">Sexo</option>
+              <option value="MASCULINO">Masculino</option>
+              <option value="FEMININO">Feminino</option>
+            </select>
+            <select
+              name="idade"
+              value={`${filtros.faixaIdadeInicial}-${filtros.faixaIdadeFinal}`}
+              onChange={handleIdadeChange}
+              className="w-full cursor-pointer p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-700"
+            >
+              {opcoesIdade.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={limparFiltros}
+              className="cursor-pointer w-full flex items-center justify-center p-2 text-sm text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              Limpar filtros
+            </button>
+          </div>
+        </div>
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <Mosaic color="#D69D0E" size="large" text="" />
+          </div>
+        )}
+        {!loading && (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {pessoas.length > 0 ? (
+                pessoas.map((pessoa) => (
+                  <PessoaCard key={pessoa.id} pessoa={pessoa} />
+                ))
+              ) : (
+                <p className="col-span-full text-center text-gray-500 py-10">
+                  Nenhum resultado encontrado.
+                </p>
               )}
             </div>
-          )}
-        </>
-      )}
-    </div>
+
+            {pessoas.length > 0 && totalPaginas > 1 && (
+              <div className="flex justify-center items-center mt-12 space-x-2">
+                {paginasVisiveis.map((item, index) =>
+                  typeof item === "number" ? (
+                    <button
+                      key={item}
+                      onClick={() => setPagina(item)}
+                      className={`cursor-pointer w-10 h-10 font-semibold text-white rounded-full transition-colors flex items-center justify-center ${
+                        pagina === item
+                          ? "bg-yellow-800 ring-2 ring-offset-2 ring-yellow-700"
+                          : "bg-yellow-700 hover:bg-yellow-800"
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  ) : (
+                    <span
+                      key={`ellipsis-${index}`}
+                      className="w-3 h-3 bg-yellow-700 rounded-full"
+                    ></span>
+                  )
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 };
 
