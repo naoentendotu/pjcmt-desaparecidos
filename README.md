@@ -8,7 +8,7 @@
 
 ## 💻 Sobre o Projeto
 
-Sistema web desenvolvido para Desenvolve MT que permite aos cidadãos:
+Sistema web desenvolvido para que possibilite os cidadãos:
 
 - Consultar registros de pessoas desaparecidas ou já localizadas
 - Enviar informações adicionais (observações, localização, fotos)
@@ -46,7 +46,7 @@ Os dados mockados estão localizados em `src/services/mockData.js` e são utiliz
 1. Clone o repositório
 
 ```bash
-git clone https://github.com/[seu-usuario]/pjctm-desaparecidos.git
+git clone https://github.com/naoentendotu/pjctm-desaparecidos.git
 cd pjctm-desaparecidos
 ```
 
