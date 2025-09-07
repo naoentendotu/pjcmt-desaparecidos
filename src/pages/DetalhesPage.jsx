@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   getPessoaByIdMock,
@@ -10,6 +10,7 @@ import InfoForm from "../components/InfoForm";
 import avatarPlaceholder from "../assets/avatar-placeholder.jpg";
 import toast from "react-hot-toast";
 import { Mosaic } from "react-loading-indicators";
+import { FileText } from "lucide-react";
 
 const formatarData = (dataString) => {
   if (!dataString) return "Não informado";
@@ -32,6 +33,146 @@ const formatarDataHora = (dataString) => {
   });
 };
 
+const Paginacao = ({ paginaAtual, totalPaginas, onPageChange }) => {
+  const paginasVisiveis = useMemo(() => {
+    const maximoBolinhasVisiveis = 4;
+    const paginas = [];
+    if (totalPaginas <= 1) return [];
+
+    if (totalPaginas <= maximoBolinhasVisiveis + 2) {
+      for (let i = 1; i <= totalPaginas; i++) paginas.push(i);
+      return paginas;
+    }
+
+    paginas.push(1);
+    let inicioBloco = Math.max(2, paginaAtual - 1);
+    let fimBloco = Math.min(totalPaginas - 1, paginaAtual + 2);
+    if (paginaAtual < maximoBolinhasVisiveis) fimBloco = maximoBolinhasVisiveis;
+    if (paginaAtual > totalPaginas - (maximoBolinhasVisiveis - 1))
+      inicioBloco = totalPaginas - (maximoBolinhasVisiveis - 1);
+    if (inicioBloco > 2) paginas.push("...");
+    for (let i = inicioBloco; i <= fimBloco; i++) paginas.push(i);
+    if (fimBloco < totalPaginas - 1) paginas.push("...");
+    paginas.push(totalPaginas);
+
+    return paginas.filter(
+      (item, index) => item !== "..." || paginas[index - 1] !== "..."
+    );
+  }, [paginaAtual, totalPaginas]);
+
+  return (
+    <div className="flex justify-center items-center mt-8 space-x-2">
+      {" "}
+      {paginasVisiveis.map((item, index) =>
+        typeof item === "number" ? (
+          <button
+            key={item}
+            onClick={() => onPageChange(item)}
+            className={`cursor-pointer w-10 h-10 font-semibold text-white rounded-full transition-colors flex items-center justify-center ${
+              paginaAtual === item
+                ? "bg-yellow-800 ring-2 ring-offset-2 ring-yellow-700"
+                : "bg-yellow-700 hover:bg-yellow-800"
+            }`}
+          >
+            {item}{" "}
+          </button>
+        ) : (
+          <span
+            key={`ellipsis-${index}`}
+            className="w-3 h-3 bg-yellow-700 rounded-full"
+          ></span>
+        )
+      )}{" "}
+    </div>
+  );
+};
+
+const TimelineItem = ({ info }) => {
+  const [dropdownAberto, setDropdownAberto] = useState(false);
+  const hasAnexos = info.anexos && info.anexos.length > 0;
+  const hasMultiplosAnexos = hasAnexos && info.anexos.length > 1;
+
+  return (
+    <div key={info.id} className="relative">
+      <div className="absolute left-[-26px] top-1 h-4 w-4 rounded-full bg-yellow-600 ring-4 ring-white"></div>
+      <div className="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200 ml-4">
+        <div className="flex items-center justify-between mb-2">
+          <p className="font-semibold text-gray-800 text-lg">
+            {formatarData(info.data)}
+          </p>
+          {hasAnexos && (
+            <div className="relative">
+              {hasMultiplosAnexos ? (
+                <button
+                  onClick={() => setDropdownAberto(!dropdownAberto)}
+                  className="cursor-pointer inline-flex items-center bg-yellow-600 text-white font-bold py-2 px-3 rounded-lg hover:bg-yellow-700 transition-colors text-sm"
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  Ver Anexos ({info.anexos.length})
+                </button>
+              ) : (
+                <a
+                  href={info.anexos[0]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cursor-pointer inline-flex items-center bg-yellow-600 text-white font-bold py-2 px-3 rounded-lg hover:bg-yellow-700 transition-colors text-sm"
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  Ver Anexo
+                </a>
+              )}
+
+              {hasMultiplosAnexos && dropdownAberto && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-amber-700">
+                  <ul className="py-1">
+                    {info.anexos.map((anexoUrl, index) => (
+                      <li key={index}>
+                        <a
+                          href={anexoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-100"
+                          onClick={() => setDropdownAberto(false)}
+                        >
+                          Anexo {index + 1}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        <p className="text-gray-600 mt-1 whitespace-pre-wrap">
+          {info.informacao}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const Timeline = ({ items }) => {
+  if (!items || items.length === 0) {
+    return (
+      <p className="text-gray-500 pt-4 text-center">
+        Nenhum registro encontrado para os filtros selecionados.
+      </p>
+    );
+  }
+
+  return (
+    <div className="relative pl-8">
+      <div className="absolute left-3 top-0 h-full w-0.5 bg-gray-200"></div>
+      <div className="space-y-8">
+        {items.map((info) => (
+          <TimelineItem key={info.id} info={info} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const DetalhesPage = () => {
   const { id } = useParams();
   const [pessoa, setPessoa] = useState(null);
@@ -40,12 +181,15 @@ const DetalhesPage = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [historico, setHistorico] = useState([]);
   const [loadingHistorico, setLoadingHistorico] = useState(true);
-  const [visibleCount, setVisibleCount] = useState(4);
   const historicoRef = useRef(null);
+
+  const [filtroDataInicio, setFiltroDataInicio] = useState("");
+  const [filtroDataFim, setFiltroDataFim] = useState("");
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const itensPorPagina = 4;
 
   useEffect(() => {
     const fetchDadosPessoa = async () => {
-      setVisibleCount(4);
       setLoading(true);
       let pessoaData;
 
@@ -105,6 +249,49 @@ const DetalhesPage = () => {
     scrollToHistorico();
   };
 
+  const historicoFiltrado = useMemo(() => {
+    setPaginaAtual(1);
+    return historico.filter((item) => {
+      const [ano, mes, dia] = item.data.split("T")[0].split("-").map(Number);
+      const dataItem = new Date(Date.UTC(ano, mes - 1, dia));
+
+      const dataInicio = filtroDataInicio
+        ? new Date(
+            Date.UTC(
+              ...filtroDataInicio
+                .split("-")
+                .map((n, i) => (i === 1 ? n - 1 : n))
+            )
+          )
+        : null;
+
+      const dataFim = filtroDataFim
+        ? new Date(
+            Date.UTC(
+              ...filtroDataFim.split("-").map((n, i) => (i === 1 ? n - 1 : n))
+            )
+          )
+        : null;
+
+      if (dataInicio && dataItem < dataInicio) return false;
+      if (dataFim && dataItem > dataFim) return false;
+      return true;
+    });
+  }, [historico, filtroDataInicio, filtroDataFim]);
+
+  const totalPaginas = Math.ceil(historicoFiltrado.length / itensPorPagina);
+
+  const itensPaginaAtual = useMemo(() => {
+    const inicio = (paginaAtual - 1) * itensPorPagina;
+    const fim = inicio + itensPorPagina;
+    return historicoFiltrado.slice(inicio, fim);
+  }, [historicoFiltrado, paginaAtual, itensPorPagina]);
+
+  const limparFiltros = () => {
+    setFiltroDataInicio("");
+    setFiltroDataFim("");
+  };
+
   const handleShare = () => {
     const shareData = {
       title: `Ajude a encontrar ${pessoa.nome}`,
@@ -120,10 +307,6 @@ const DetalhesPage = () => {
       navigator.clipboard.writeText(window.location.href);
       toast.success("Link copiado para a área de transferência!");
     }
-  };
-
-  const handleLoadMore = () => {
-    setVisibleCount((prevCount) => prevCount + 4);
   };
 
   const scrollToHistorico = () => {
@@ -253,62 +436,59 @@ const DetalhesPage = () => {
         <h3 className="text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">
           Linha do Tempo do Caso
         </h3>
+
+        <div className="border border-gray-200 p-4 rounded-md mb-6 flex flex-col sm:flex-row gap-4 items-center">
+          <div className="relative w-full sm:w-auto flex-1">
+            <label
+              htmlFor="dataInicio"
+              className="text-sm font-medium text-gray-600"
+            >
+              De:
+            </label>
+            <input
+              type="date"
+              id="dataInicio"
+              value={filtroDataInicio}
+              onChange={(e) => setFiltroDataInicio(e.target.value)}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg cursor-pointer"
+            />
+          </div>
+          <div className="relative w-full sm:w-auto flex-1">
+            <label
+              htmlFor="dataFim"
+              className="text-sm font-medium text-gray-600"
+            >
+              Até:
+            </label>
+            <input
+              type="date"
+              id="dataFim"
+              value={filtroDataFim}
+              onChange={(e) => setFiltroDataFim(e.target.value)}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-lg cursor-pointer"
+            />
+          </div>
+          <button
+            onClick={limparFiltros}
+            className="w-full sm:w-auto bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors self-end"
+          >
+            Limpar
+          </button>
+        </div>
+
         {loadingHistorico ? (
-          <div className="flex justify-center items-center h-screen">
+          <div className="flex justify-center items-center py-20">
             <Mosaic color="#D69D0E" size="large" text="" />
           </div>
-        ) : historico.length > 0 ? (
-          <>
-            <div className="space-y-6">
-              {historico.slice(0, visibleCount).map((info) => (
-                <div
-                  key={info.id}
-                  className="border-l-4 border-yellow-500 pl-4"
-                >
-                  <p className="font-semibold text-gray-800">
-                    {formatarData(info.data)}
-                  </p>
-                  <p className="text-gray-600 mt-1">{info.informacao}</p>
-                  {info.anexos && info.anexos.length > 0 && (
-                    <div className="mt-2">
-                      <p className="text-sm font-medium text-gray-700">
-                        Anexos:
-                      </p>
-                      <ul className="list-disc list-inside">
-                        {info.anexos.map((anexoUrl, index) => (
-                          <li key={index}>
-                            <a
-                              href={anexoUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline text-sm"
-                            >
-                              Visualizar Anexo {index + 1}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {visibleCount < historico.length && (
-              <div className="mt-2 text-center">
-                <button
-                  onClick={handleLoadMore}
-                  className="cursor-pointer bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 transition-colors"
-                >
-                  Carregar Mais
-                </button>
-              </div>
-            )}
-          </>
         ) : (
-          <p className="text-gray-500 pt-4">
-            Nenhuma informação adicional foi registrada.
-          </p>
+          <>
+            <Timeline items={itensPaginaAtual} />
+            <Paginacao
+              paginaAtual={paginaAtual}
+              totalPaginas={totalPaginas}
+              onPageChange={setPaginaAtual}
+            />
+          </>
         )}
       </div>
 
