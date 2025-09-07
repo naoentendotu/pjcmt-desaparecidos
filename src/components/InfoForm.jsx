@@ -3,7 +3,7 @@ import { enviarInformacao } from "../services/api";
 import toast from "react-hot-toast";
 import MapaSelect from "./MapaSelect";
 
-const InfoForm = ({ ocoId, closeModal, show }) => {
+const InfoForm = ({ ocoId, closeModal, show, onSuccess }) => {
   const [observacao, setObservacao] = useState("");
   const [dataAvistamento, setDataAvistamento] = useState("");
   const [descricaoFoto, setDescricaoFoto] = useState("");
@@ -86,7 +86,7 @@ const InfoForm = ({ ocoId, closeModal, show }) => {
       toast.success(
         "Informação enviada com sucesso! Obrigado por sua colaboração."
       );
-      closeModal();
+      onSuccess();
     } catch (err) {
       toast.error(
         "Falha ao enviar a informação. Verifique os dados e tente novamente."

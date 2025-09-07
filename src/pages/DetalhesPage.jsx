@@ -99,6 +99,12 @@ const DetalhesPage = () => {
     }
   };
 
+  const handleFormSuccess = () => {
+    setShowForm(false);
+    fetchHistorico(pessoa.ultimaOcorrencia.ocoId);
+    scrollToHistorico();
+  };
+
   const handleShare = () => {
     const shareData = {
       title: `Ajude a encontrar ${pessoa.nome}`,
@@ -319,6 +325,7 @@ const DetalhesPage = () => {
             ocoId={pessoa.ultimaOcorrencia.ocoId}
             closeModal={() => setShowForm(false)}
             show={showForm}
+            onSuccess={handleFormSuccess}
           />
         </div>
       )}
