@@ -16,7 +16,7 @@ Sistema web desenvolvido para que possibilite os cidadãos:
 
 ### ⚠️ Tratamento de Falhas de Conexão
 
-Para garantir uma melhor experiência do usuário, implementamos um sistema de fallback com dados mockados. Caso ocorra alguma falha na conexão com a API oficial, o sistema automaticamente utiliza dados locais para:
+Para garantir uma melhor experiência do usuário, foi implementado um sistema de fallback com dados mockados. Caso ocorra alguma falha na conexão com a API oficial, o sistema automaticamente utiliza dados locais para:
 
 - Manter a aplicação funcional mesmo offline
 - Permitir a visualização de exemplos de registros
