@@ -117,7 +117,7 @@ src/
 └── main.jsx       # Ponto de entrada
 ```
 
-## 🌟 Funcionalidades
+## 🧾 Funcionalidades
 
 - Listagem de pessoas desaparecidas/localizadas
 - Paginação de resultados
