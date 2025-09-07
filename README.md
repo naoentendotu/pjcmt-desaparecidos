@@ -65,6 +65,14 @@ npm run dev
 
 ### Execução com Docker
 
+> ⚠️ Antes de executar os comandos abaixo, certifique-se de que o Docker Desktop esteja aberto e em execução no seu sistema. Verifique com:
+
+```bash
+docker info
+```
+
+Se o comando falhar, abra o Docker Desktop e aguarde até que o daemon esteja ativo.
+
 1. Construa a imagem Docker
 
 ```bash
