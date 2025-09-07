@@ -138,7 +138,7 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="container mx-auto px-4 pt-24 md:px-8 md:pb-8 md:pt-36">
+      <div className="container mx-auto px-4 pt-24 md:px-8 md:pb-8 md:pt-40">
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <form
             onSubmit={handleSubmitBusca}

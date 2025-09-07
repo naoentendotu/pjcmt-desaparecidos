@@ -11,6 +11,7 @@ import avatarPlaceholder from "../assets/avatar-placeholder.jpg";
 import toast from "react-hot-toast";
 import { Mosaic } from "react-loading-indicators";
 import { FileText } from "lucide-react";
+import Footer from "../components/Footer";
 
 const formatarData = (dataString) => {
   if (!dataString) return "Não informado";
@@ -319,7 +320,7 @@ const DetalhesPage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen pt-28 md:pt-40">
         <Mosaic color="#D69D0E" size="large" text="" />
       </div>
     );
@@ -327,7 +328,7 @@ const DetalhesPage = () => {
 
   if (!pessoa) {
     return (
-      <div className="container mx-auto pt-24 px-4 md:px-8 md:pb-8 md:pt-36">
+      <div className="container mx-auto pt-28 px-4 md:px-8 md:pb-8 md:pt-40">
         <p className="text-gray-600">Não foi possível carregar os dados.</p>
         <Link
           to="/"
@@ -348,185 +349,191 @@ const DetalhesPage = () => {
       : "text-green-600 bg-green-100";
 
   return (
-    <div className="container mx-auto pt-35 px-4 md:px-8 md:pb-8 md:pt-36">
-      <Link
-        to="/"
-        className="cursor-pointer inline-block bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors mb-4"
-      >
-        Voltar para página inicial
-      </Link>
+    <>
+      <div className="container mx-auto pt-28 px-4 md:px-8 md:pb-8 md:pt-38">
+        <Link
+          to="/"
+          className="cursor-pointer inline-block bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors mb-4"
+        >
+          Voltar para página inicial
+        </Link>
 
-      <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="md:flex">
-          <div className="md:w-1/3 ">
-            <img
-              src={pessoa.urlFoto || avatarPlaceholder}
-              alt={pessoa.nome}
-              className="cursor-pointer w-150 h-130 object-cover"
-              onClick={() => setShowImageModal(true)}
-              title="Clique para ampliar a imagem"
-            />
-          </div>
-          <div className="md:w-2/3 p-6">
-            <div className="flex justify-between items-start border-b border-gray-200 pb-2 mb-4">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-                {pessoa.nome}
-              </h2>
-              <span
-                className={`px-3 py-1 text-sm font-bold rounded-full ${statusClass}`}
-              >
-                {status}
-              </span>
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="md:flex">
+            <div className="md:w-1/3 ">
+              <img
+                src={pessoa.urlFoto || avatarPlaceholder}
+                alt={pessoa.nome}
+                className="cursor-pointer w-150 h-130 object-cover"
+                onClick={() => setShowImageModal(true)}
+                title="Clique para ampliar a imagem"
+                onError={(e) => {
+                  e.target.src = avatarPlaceholder;
+                }}
+              />
             </div>
-            <div className="text-sm md:text-base space-y-1 text-gray-600">
-              <p className="mt-4 text-gray-600">
-                <strong>Idade:</strong> {pessoa.idade || "Não informado"}
-              </p>
-              <p className="mt-1 text-gray-600">
-                <strong>Sexo:</strong> {pessoa.sexo || "Não informado"}
-              </p>
-              <p className="mt-1 text-gray-600">
-                <strong>Data do desaparecimento:</strong>
-                {formatarDataHora(pessoa.ultimaOcorrencia.dtDesaparecimento)}
-              </p>
-              <p className="mt-1 text-gray-600">
-                <strong>Local do Desaparecimento:</strong>
-                {pessoa.ultimaOcorrencia.localDesaparecimentoConcat ||
-                  "Não informado"}
-              </p>
-              <p className="mt-1 text-gray-600">
-                <strong>Circunstâncias:</strong>
-                {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO?.informacao ||
-                  "Não informado"}
-              </p>
-              <p className="mt-1 text-gray-600">
-                <strong>Vestimentas:</strong>
-                {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
-                  ?.vestimentasDesaparecido || "Não informado"}
-              </p>
-            </div>
-            <div className="mt-6 flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => setShowForm(true)}
-                className="cursor-pointer bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Tenho informações
-              </button>
-              <button
-                onClick={handleShare}
-                className="cursor-pointer bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                Compartilhar caso
-              </button>
-              <button
-                onClick={scrollToHistorico}
-                className="cursor-pointer bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                Ver histórico
-              </button>
+            <div className="md:w-2/3 p-6">
+              <div className="flex justify-between items-start border-b border-gray-200 pb-2 mb-4">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                  {pessoa.nome}
+                </h2>
+                <span
+                  className={`px-3 py-1 text-sm font-bold rounded-full ${statusClass}`}
+                >
+                  {status}
+                </span>
+              </div>
+              <div className="text-sm md:text-base space-y-1 text-gray-600">
+                <p className="mt-4 text-gray-600">
+                  <strong>Idade:</strong> {pessoa.idade || "Não informado"}
+                </p>
+                <p className="mt-1 text-gray-600">
+                  <strong>Sexo:</strong> {pessoa.sexo || "Não informado"}
+                </p>
+                <p className="mt-1 text-gray-600">
+                  <strong>Data do desaparecimento:</strong>
+                  {formatarDataHora(pessoa.ultimaOcorrencia.dtDesaparecimento)}
+                </p>
+                <p className="mt-1 text-gray-600">
+                  <strong>Local do Desaparecimento:</strong>
+                  {pessoa.ultimaOcorrencia.localDesaparecimentoConcat ||
+                    "Não informado"}
+                </p>
+                <p className="mt-1 text-gray-600">
+                  <strong>Circunstâncias:</strong>
+                  {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
+                    ?.informacao || "Não informado"}
+                </p>
+                <p className="mt-1 text-gray-600">
+                  <strong>Vestimentas:</strong>
+                  {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
+                    ?.vestimentasDesaparecido || "Não informado"}
+                </p>
+              </div>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="cursor-pointer bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Tenho informações
+                </button>
+                <button
+                  onClick={handleShare}
+                  className="cursor-pointer bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Compartilhar caso
+                </button>
+                <button
+                  onClick={scrollToHistorico}
+                  className="cursor-pointer bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  Ver histórico
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        ref={historicoRef}
-        className="mt-8 bg-white shadow-lg rounded-lg p-4 sm:p-6 scroll-mt-24 md:scroll-mt-36"
-      >
-        <h3 className="text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">
-          Linha do Tempo do Caso
-        </h3>
-
-        <div className="border border-gray-200 p-4 rounded-md mb-6 flex flex-col sm:flex-row gap-4 items-center">
-          <div className="relative w-full sm:w-auto flex-1">
-            <label
-              htmlFor="dataInicio"
-              className="text-sm font-medium text-gray-600"
-            >
-              De:
-            </label>
-            <input
-              type="date"
-              id="dataInicio"
-              value={filtroDataInicio}
-              onChange={(e) => setFiltroDataInicio(e.target.value)}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg cursor-pointer"
-            />
-          </div>
-          <div className="relative w-full sm:w-auto flex-1">
-            <label
-              htmlFor="dataFim"
-              className="text-sm font-medium text-gray-600"
-            >
-              Até:
-            </label>
-            <input
-              type="date"
-              id="dataFim"
-              value={filtroDataFim}
-              onChange={(e) => setFiltroDataFim(e.target.value)}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-lg cursor-pointer"
-            />
-          </div>
-          <button
-            onClick={limparFiltros}
-            className="w-full sm:w-auto bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors self-end"
-          >
-            Limpar
-          </button>
-        </div>
-
-        {loadingHistorico ? (
-          <div className="flex justify-center items-center py-20">
-            <Mosaic color="#D69D0E" size="large" text="" />
-          </div>
-        ) : (
-          <>
-            <Timeline items={itensPaginaAtual} />
-            <Paginacao
-              paginaAtual={paginaAtual}
-              totalPaginas={totalPaginas}
-              onPageChange={setPaginaAtual}
-            />
-          </>
-        )}
-      </div>
-      {showForm && (
         <div
-          className={`
+          ref={historicoRef}
+          className="mt-8 bg-white shadow-lg rounded-lg p-4 sm:p-6 scroll-mt-24 md:scroll-mt-36"
+        >
+          <h3 className="text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">
+            Linha do Tempo do Caso
+          </h3>
+
+          <div className="border border-gray-200 p-4 rounded-md mb-6 flex flex-col sm:flex-row gap-4 items-center">
+            <div className="relative w-full sm:w-auto flex-1">
+              <label
+                htmlFor="dataInicio"
+                className="text-sm font-medium text-gray-600"
+              >
+                De:
+              </label>
+              <input
+                type="date"
+                id="dataInicio"
+                value={filtroDataInicio}
+                onChange={(e) => setFiltroDataInicio(e.target.value)}
+                className="w-full mt-1 p-2 border border-gray-300 rounded-lg cursor-pointer"
+              />
+            </div>
+            <div className="relative w-full sm:w-auto flex-1">
+              <label
+                htmlFor="dataFim"
+                className="text-sm font-medium text-gray-600"
+              >
+                Até:
+              </label>
+              <input
+                type="date"
+                id="dataFim"
+                value={filtroDataFim}
+                onChange={(e) => setFiltroDataFim(e.target.value)}
+                className="w-full mt-1 p-2 border border-gray-300 rounded-lg cursor-pointer"
+              />
+            </div>
+            <button
+              onClick={limparFiltros}
+              className="w-full sm:w-auto bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors self-end"
+            >
+              Limpar
+            </button>
+          </div>
+
+          {loadingHistorico ? (
+            <div className="flex justify-center items-center py-20">
+              <Mosaic color="#D69D0E" size="large" text="" />
+            </div>
+          ) : (
+            <>
+              <Timeline items={itensPaginaAtual} />
+              <Paginacao
+                paginaAtual={paginaAtual}
+                totalPaginas={totalPaginas}
+                onPageChange={setPaginaAtual}
+              />
+            </>
+          )}
+        </div>
+        {showForm && (
+          <div
+            className={`
             fixed inset-0 z-50 flex items-center justify-center p-4
             bg-black/30 backdrop-blur-sm
             transition-opacity duration-300 ease-in-out
             ${showForm ? "opacity-100 visible" : "opacity-0 invisible"}
           `}
-        >
-          <InfoForm
-            ocoId={pessoa.ultimaOcorrencia.ocoId}
-            closeModal={() => setShowForm(false)}
-            show={showForm}
-            onSuccess={handleFormSuccess}
-          />
-        </div>
-      )}
-      {showImageModal && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
-          onClick={() => setShowImageModal(false)}
-        >
-          <button
-            className="absolute top-4 right-8 text-white text-4xl font-bold hover:text-gray-300"
+          >
+            <InfoForm
+              ocoId={pessoa.ultimaOcorrencia.ocoId}
+              closeModal={() => setShowForm(false)}
+              show={showForm}
+              onSuccess={handleFormSuccess}
+            />
+          </div>
+        )}
+        {showImageModal && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
             onClick={() => setShowImageModal(false)}
           >
-            &times;
-          </button>
-          <img
-            src={pessoa.urlFoto || avatarPlaceholder}
-            alt="Visualização em tela cheia"
-            className=" max-w-full max-h-full object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      )}
-    </div>
+            <button
+              className="absolute top-4 right-8 text-white text-4xl font-bold hover:text-gray-300"
+              onClick={() => setShowImageModal(false)}
+            >
+              &times;
+            </button>
+            <img
+              src={pessoa.urlFoto || avatarPlaceholder}
+              alt="Visualização em tela cheia"
+              className=" max-w-full max-h-full object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 };
 

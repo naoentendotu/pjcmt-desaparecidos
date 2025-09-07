@@ -86,6 +86,10 @@ export const getInformacoesDesaparecido = (ocorrenciaId) => {
   });
 };
 
+export const getEstatisticas = () => {
+  return apiClient.get("/v1/pessoas/aberto/estatistico");
+};
+
 // =================================================================
 // FUNÇÕES DE MOCK
 // =================================================================
