@@ -44,7 +44,7 @@ export const getPessoaById = (id) => {
  * @param {number} dados.ocoId - ID da ocorrência.
  * @param {string} dados.informacao - A observação sobre a pessoa.
  * @param {string} dados.data - Data em que a pessoa foi vista (formato yyyy-MM-dd).
- * @param {File} dados.foto - A imagem.
+ * @param {File[]} dados.fotos - Array com as imagens.
  * @param {string} dados.descricaoFoto - Descrição para a foto.
  * @returns {Promise<object>}
  */
@@ -52,12 +52,15 @@ export const enviarInformacao = ({
   ocoId,
   informacao,
   data,
-  foto,
+  fotos,
   descricaoFoto,
 }) => {
   const formData = new FormData();
-  if (foto) {
-    formData.append("files", foto);
+
+  if (fotos && fotos.length > 0) {
+    fotos.forEach((foto, index) => {
+      formData.append("files", foto);
+    });
   }
 
   return apiClient.post("/v1/ocorrencias/informacoes-desaparecido", formData, {

@@ -391,21 +391,21 @@ const DetalhesPage = () => {
                   <strong>Sexo:</strong> {pessoa.sexo || "Não informado"}
                 </p>
                 <p className="mt-1 text-gray-600">
-                  <strong>Data do desaparecimento:</strong>
+                  <strong>Data do desaparecimento: </strong>
                   {formatarDataHora(pessoa.ultimaOcorrencia.dtDesaparecimento)}
                 </p>
                 <p className="mt-1 text-gray-600">
-                  <strong>Local do Desaparecimento:</strong>
+                  <strong>Local do Desaparecimento: </strong>
                   {pessoa.ultimaOcorrencia.localDesaparecimentoConcat ||
                     "Não informado"}
                 </p>
                 <p className="mt-1 text-gray-600">
-                  <strong>Circunstâncias:</strong>
+                  <strong>Circunstâncias: </strong>
                   {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
                     ?.informacao || "Não informado"}
                 </p>
                 <p className="mt-1 text-gray-600">
-                  <strong>Vestimentas:</strong>
+                  <strong>Vestimentas: </strong>
                   {pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO
                     ?.vestimentasDesaparecido || "Não informado"}
                 </p>

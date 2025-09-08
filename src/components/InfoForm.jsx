@@ -7,7 +7,7 @@ const InfoForm = ({ ocoId, closeModal, show, onSuccess }) => {
   const [observacao, setObservacao] = useState("");
   const [dataAvistamento, setDataAvistamento] = useState("");
   const [descricaoFoto, setDescricaoFoto] = useState("");
-  const [foto, setFoto] = useState(null);
+  const [fotos, setFotos] = useState([]);
   const [location, setLocation] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [endereco, setEndereco] = useState("");
@@ -74,13 +74,16 @@ const InfoForm = ({ ocoId, closeModal, show, onSuccess }) => {
     if (location && endereco && !endereco.includes("Não foi possível")) {
       informacaoFinal += `\n\nLocal: ${endereco}`;
     }
+    if (descricaoFoto) {
+      informacaoFinal += `\nDescrição da foto: ${descricaoFoto}`;
+    }
 
     try {
       await enviarInformacao({
         ocoId,
         informacao: informacaoFinal,
         data: dataAvistamento,
-        foto,
+        fotos,
         descricaoFoto: descricaoFoto || "Foto enviada pelo cidadão",
       });
       toast.success(
@@ -95,6 +98,10 @@ const InfoForm = ({ ocoId, closeModal, show, onSuccess }) => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleRemoveFoto = (indexToRemove) => {
+    setFotos(fotos.filter((_, index) => index !== indexToRemove));
   };
 
   return (
@@ -149,28 +156,57 @@ const InfoForm = ({ ocoId, closeModal, show, onSuccess }) => {
                 required
               />
             </div>
+
             <div>
               <label
                 htmlFor="foto"
                 className="block text-sm font-medium text-gray-700"
               >
-                Anexar foto (opcional)
+                Anexar foto(s) (opcional)
               </label>
               <input
                 type="file"
                 id="foto"
-                onChange={(e) => setFoto(e.target.files[0])}
+                multiple
+                onChange={(e) => setFotos(Array.from(e.target.files))}
                 accept="image/*"
                 className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-500 file:text-white hover:file:bg-amber-600"
               />
             </div>
-            {foto && (
+
+            {fotos.length > 0 && (
+              <div className="mt-2 p-3 bg-gray-50 border rounded-md">
+                <p className="text-sm font-semibold text-gray-700">
+                  Arquivos selecionados ({fotos.length}):
+                </p>
+                <ul className="list-disc pl-5 mt-1 space-y-1 text-sm text-gray-600">
+                  {fotos.map((file, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center justify-between"
+                    >
+                      <span className="truncate pr-2">{file.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFoto(index)}
+                        className="text-red-500 hover:text-red-700 font-bold"
+                        title="Remover arquivo"
+                      >
+                        &times;
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {fotos.length > 0 && (
               <div>
                 <label
                   htmlFor="descricaoFoto"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Descrição da foto
+                  Descrição geral da(s) foto(s)
                 </label>
                 <input
                   type="text"
@@ -178,7 +214,7 @@ const InfoForm = ({ ocoId, closeModal, show, onSuccess }) => {
                   value={descricaoFoto}
                   onChange={(e) => setDescricaoFoto(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  placeholder="Ex: Foto da pessoa na praça."
+                  placeholder="Ex: Fotos da pessoa na praça."
                 />
               </div>
             )}
