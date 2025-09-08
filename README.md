@@ -145,3 +145,25 @@ O projeto inclui:
 - `docker-compose.yml` para ambiente de desenvolvimento
 
 Desenvolvido como parte do processo seletivo para Desenvolve MT
+
+## 📸 Screenshots
+
+### Página Inicial (HomePage)
+
+![Página Inicial](src/assets/screenshots/homepage.png)
+_Lista de pessoas desaparecidas com filtros de busca e paginação_
+
+### Página de Detalhes
+
+![Detalhes do Caso](src/assets/screenshots/detalhespage.png)
+_Informações detalhadas sobre o caso selecionado_
+
+### Formulário de Informações
+
+![Formulário](src/assets/screenshots/formulario.png)
+_Formulário para envio de novas informações com todas as suas possibilidades preenchidas_
+
+### Histórico do Caso
+
+![Histórico](src/assets/screenshots/historico.png)
+_Histórico completo de informações e atualizações do caso, com paginação_
