@@ -45,8 +45,8 @@ Os dados mockados estão localizados em `src/services/mockData.js` e são utiliz
 1. Clone o repositório
 
 ```bash
-git clone https://github.com/naoentendotu/pjctm-desaparecidos.git
-cd pjctm-desaparecidos
+git clone https://github.com/naoentendotu/pjcmt-desaparecidos.git
+cd pjcmt-desaparecidos
 ```
 
 2. Instale as dependências
@@ -76,13 +76,13 @@ Se o comando falhar, abra o Docker Desktop e aguarde até que o daemon esteja at
 1. Construa a imagem Docker
 
 ```bash
-docker build -t pjctm-desaparecidos .
+docker build -t pjcmt-desaparecidos .
 ```
 
 2. Execute o container
 
 ```bash
-docker run -d -p 8080:80 pjctm-desaparecidos
+docker run -d -p 8080:80 pjcmt-desaparecidos
 ```
 
 3. Acesse o projeto em http://localhost:8080
