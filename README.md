@@ -145,7 +145,6 @@ O projeto inclui:
 - `Dockerfile` para build de produção
 - `docker-compose.yml` para ambiente de desenvolvimento
 
-Desenvolvido como parte do processo seletivo para Desenvolve MT
 
 ## 📸 Screenshots
 
@@ -168,3 +167,6 @@ _Formulário para envio de novas informações com todas as suas possibilidades 
 
 ![Histórico](src/assets/screenshots/historico.png)
 _Histórico completo de informações e atualizações do caso, com paginação_
+
+Desenvolvido como parte do processo seletivo para Desenvolve MT
+
