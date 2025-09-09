@@ -127,6 +127,7 @@ src/
 
 ## 🧾 Funcionalidades
 
+- Consome a API oficial [Swagger da Abitus](https://abitus-api.geia.vip/swagger-ui/index.html)
 - Listagem de pessoas desaparecidas/localizadas
 - Paginação de resultados
 - Busca por múltiplos parâmetros
